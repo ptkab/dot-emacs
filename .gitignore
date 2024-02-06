@@ -1,0 +1,8 @@
+# Ignore Everything
+/*
+
+# Except
+!.gitignore
+!init.el
+!early-init.el
+!lisp/
