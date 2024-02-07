@@ -1,5 +1,7 @@
 ;;; early-init.el --- Early init load config for Emacs -*- lexical-binding: t -*-
 
+;;; Commentary:
+
 ;;; Code:
 
 ;; Disable the built in package.el package manager. I use Elpaca instead.

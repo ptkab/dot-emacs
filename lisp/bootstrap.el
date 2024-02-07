@@ -81,6 +81,8 @@
 ;; Make Emacs a better code editor as well as a text editor.
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'column-number-mode)
+(electric-pair-mode 1)
+(visual-line-mode 1)
 (setq font-lock-maximum-decoration t)
 (setq scroll-preserve-screen-position t)
 (global-hl-line-mode t)
@@ -110,6 +112,14 @@
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 (setq read-buffer-completion-ignore-case t)
+;; TAB cycle if there are only few candidates
+(setq completion-cycle-threshold 3)
+;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
+;; Enable indentation+completion using the TAB key.
+(setq tab-always-indent 'complete)
 
 ;; Ignore buffers that start with '*' when switching buffers.
 (set-frame-parameter (selected-frame) 'buffer-predicate
@@ -118,10 +128,24 @@
 ;; Use Option key as Super on Mac.
 (setq mac-option-modifier 'super)
 
-;; Better default keybindings for better buffer management.
+;; Better keybindings for buffer management.
 (bind-key "M-`" 'other-frame)
 (bind-key "RET" 'newline-and-indent)
 (bind-key "C-x k" 'kill-current-buffer)
+
+;; Better bindings for movement.
+(bind-key "s-<left>" 'left-word)
+(bind-key "s-<right>" 'right-word)
+(bind-key "M-<left>" 'move-beginning-of-line)
+(bind-key "M-<right>" 'move-end-of-line)
+(bind-key "M-<up>" 'beginning-of-buffer)
+(bind-key "M-<down>" 'end-of-buffer)
+
+;; Better bindings for editing.
+(bind-key "M-/" 'sensible-defaults/comment-or-uncomment-region-or-line)
+(bind-key "M-z" 'undo)
+(bind-key "M-Z" 'undo-redo)
+(bind-key "M-d" 'mark-word)
 
 ;; Sync the sytem PATH variable with Emacs.
 (use-package exec-path-from-shell

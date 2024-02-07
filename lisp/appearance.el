@@ -27,6 +27,18 @@
   (unless (member "Symbols Nerd Font" (font-family-list))
     (nerd-icons-install-fonts t)))
 
+;; Show nice icons with Corfu completion.
+(use-package nerd-icons-corfu
+  :after corfu)
+
+;; Show nice icons in the minibuffer with Marganalia.
+(use-package nerd-icons-completion
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  :hook
+  (marginalia-mode . nerd-icons-completion-marginalia-setup))
+
 (use-package doom-modeline
   :custom
   (doom-modeline-enable-word-count t)
@@ -39,7 +51,7 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-one-light t))
+  (load-theme 'doom-vibrant t))
 
 (use-package modus-themes
   :disabled
