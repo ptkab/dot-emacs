@@ -140,6 +140,8 @@
 (bind-key "M-<right>" 'move-end-of-line)
 (bind-key "M-<up>" 'beginning-of-buffer)
 (bind-key "M-<down>" 'end-of-buffer)
+(bind-key "M-[" 'previous-buffer)
+(bind-key "M-]" 'next-buffer)
 
 ;; Better bindings for editing.
 (bind-key "M-/" 'sensible-defaults/comment-or-uncomment-region-or-line)

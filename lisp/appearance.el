@@ -39,6 +39,12 @@
   :hook
   (marginalia-mode . nerd-icons-completion-marginalia-setup))
 
+;; Nice icons in Treemacs.
+(use-package treemacs-nerd-icons
+  :after treemacs
+  :config
+  (treemacs-load-theme "nerd-icons"))
+
 (use-package doom-modeline
   :custom
   (doom-modeline-enable-word-count t)
