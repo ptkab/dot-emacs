@@ -11,7 +11,7 @@
 
 ;; I use the default project.el not projectile.
 (use-package project
-  :elpaca nil
+  :ensure nil
   :bind ("C-x f" . project-find-file))
 
 (use-package treemacs
@@ -26,8 +26,7 @@
   (treemacs-move-forward-on-expand t)
   :bind
   ("C-M-0" . treemacs)
-  ("M-0" . treemacs-select-window)
-  :config (treemacs))
+  ("M-0" . treemacs-select-window))
 
 (provide 'dev)
 ;; dev.el ends here.

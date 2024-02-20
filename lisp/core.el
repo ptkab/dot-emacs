@@ -56,7 +56,7 @@
 
 ;; Vertico uses savehist to sort the completion options.
 (use-package savehist
-  :elpaca nil
+  :ensure nil
   :config
   (savehist-mode))
 
@@ -81,8 +81,8 @@
 (use-package vertico-posframe
   :init
   (setq vertico-posframe-parameters
-      '((left-fringe . 8)
-        (right-fringe . 8)))
+	'((left-fringe . 8)
+          (right-fringe . 8)))
   :config
   (vertico-posframe-mode))
 
@@ -141,6 +141,7 @@
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
+	 ("C-c s" . consult-ripgrep)               ;; I am used to this key from Ivy-Counsel
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)

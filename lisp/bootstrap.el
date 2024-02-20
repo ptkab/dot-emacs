@@ -53,8 +53,13 @@
 ;; Use the `use-package` macro with Elpaca
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)
-  (setq elpaca-use-package-by-default t))
+  (setq use-package-always-ensure t))
 (elpaca-wait)
+
+;; (use-package org
+;;   :ensure t
+;;   :config (org-mode))
+;; (elpaca-wait)
 
 ;; Sensible defaults is a collection of better default functions and keybindings.
 (elpaca (sensible-defaults
@@ -67,6 +72,10 @@
             (sensible-defaults/use-all-settings)
             (sensible-defaults/use-all-keybindings)))
 
+;; Set buffer margins
+(setq-default left-margin-width 1 right-margin-width 1)
+(set-window-buffer nil (current-buffer))
+
 (setq x-underline-at-descent-line t)
 
 ;; Set the UTF-8 as default encoding
@@ -77,16 +86,18 @@
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment 'utf-8)
 (setq locale-coding-system 'utf-8)
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 ;; Make Emacs a better code editor as well as a text editor.
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'column-number-mode)
 (electric-pair-mode 1)
-(visual-line-mode 1)
+(turn-on-visual-line-mode)
+(turn-on-auto-fill)
 (setq font-lock-maximum-decoration t)
 (setq scroll-preserve-screen-position t)
 (global-hl-line-mode t)
-(turn-on-auto-fill)
+(blink-cursor-mode -1)
 
 ;; I don't want autosave and backup files that Emacs creates.
 (setq-default
@@ -151,11 +162,11 @@
 
 ;; Sync the sytem PATH variable with Emacs.
 (use-package exec-path-from-shell
-	:config
-	(when (memq window-system '(mac ns x))
-		(exec-path-from-shell-initialize))
-	(when (daemonp)
-		(exec-path-from-shell-initialize)))
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  (when (daemonp)
+    (exec-path-from-shell-initialize)))
 
 
 (provide 'bootstrap)
