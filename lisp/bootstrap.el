@@ -56,25 +56,12 @@
   (setq use-package-always-ensure t))
 (elpaca-wait)
 
-;; (use-package org
-;;   :ensure t
-;;   :config (org-mode))
-;; (elpaca-wait)
-
 ;; Sensible defaults is a collection of better default functions and keybindings.
-(elpaca (sensible-defaults
-         :host github
-         :repo "hrs/sensible-defaults.el"))
 (add-hook 'elpaca-after-init-hook
 	  (lambda ()
-	    (load-file
-             (expand-file-name "elpaca/builds/sensible-defaults/sensible-defaults.el" user-emacs-directory))
+	    (require 'sensible-defaults)
             (sensible-defaults/use-all-settings)
             (sensible-defaults/use-all-keybindings)))
-
-;; Set buffer margins
-(setq-default left-margin-width 1 right-margin-width 1)
-(set-window-buffer nil (current-buffer))
 
 (setq x-underline-at-descent-line t)
 
