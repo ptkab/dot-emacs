@@ -18,7 +18,7 @@
 (setq-default frame-title-format '("%b [%m]"))
 
 ;; Set font face and size.
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 150)
 (set-frame-font "JetBrains Mono")
 
 ;; Required for doom-modeline
@@ -66,7 +66,8 @@
       (setq pratik/active-theme pratik/dark-theme)
     (setq pratik/active-theme pratik/light-theme))
   (load-theme pratik/active-theme t))
-(global-set-key (kbd "C-x c") 'pratik/toggle-dark-light-theme)
+(org-mode) ;; Fixes messed up leading stars.
+(bind-key "C-x c" 'pratik/toggle-dark-light-theme)
 
 
 (use-package doom-themes
@@ -81,6 +82,7 @@
   (solaire-global-mode +1))
 
 (use-package spacemacs-theme
+  :disabled
   :config
   (require 'spacemacs-theme)
   (deftheme spacemacs-light "Spacemacs light theme")
@@ -91,7 +93,21 @@
   (provide-theme 'spacemacs-dark)
   (setq pratik/light-theme 'spacemacs-light
 	pratik/dark-theme 'spacemacs-dark)
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'spacemacs-light t))
+
+(use-package zenburn-theme
+  :disabled
+  :init
+  (setq zenburn-scale-org-headlines t)
+  (setq zenburn-scale-outline-headlines t)
+  :config
+  (load-theme 'zenburn t))
+
+(use-package flucui-themes
+  :init
+  (flucui-themes-load-style 'light)
+  :bind
+  ("C-x c" . flucui-themes-switch-style))
 
 (provide 'appearance)
 ;;; appearance.el ends here.

@@ -24,6 +24,8 @@
   (treemacs-filewatch-mode t)
   (treemacs-indent-guide-mode t)
   (treemacs-move-forward-on-expand t)
+  :config
+  (treemacs-hide-gitignored-files-mode t)
   :bind
   ("C-M-0" . treemacs)
   ("M-0" . treemacs-select-window))

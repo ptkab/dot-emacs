@@ -2,10 +2,6 @@
 
 ;; Code:
 
-;; (use-package org
-;;   :ensure t)
-;; (elpaca-wait)
-
 (setq org-directory "~/org")
 
 (setq-default
@@ -48,11 +44,6 @@
  'org-babel-load-languages
  '((python . t)))
 
-;; Replace all "-" list points with a dot "•"
-(font-lock-add-keywords 'org-mode
-                        '(("^ *\\([-]\\) "
-                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
 (use-package org-superstar
   :after org
   :custom
@@ -60,6 +51,10 @@
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
+(use-package org-modern
+  :after org
+  :config
+  (global-org-modern-mode))
 
 (provide 'org-config)
 ;; org-config.el ends here.

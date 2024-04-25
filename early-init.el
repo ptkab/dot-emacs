@@ -4,7 +4,7 @@
 
 ;;; Code:
 
-;; Disable the built in package.el package manager. I use Elpaca instead.
+;; Disable the built in package.el package manager. I use Straight instead.
 (setq package-enable-at-startup nil)
 (setq inhibit-default-init nil)
 
@@ -33,7 +33,7 @@
 (setq ring-bell-function #'ignore
       inhibit-startup-screen t)
 
-(setq desktop-restore-forces-onscreen nil)
+;; (setq desktop-restore-forces-onscreen nil)
 
 (provide 'early-init)
 ;;; early-init.el ends here.

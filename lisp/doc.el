@@ -17,5 +17,27 @@
   :config
   (setq markdown-command "pandoc"))
 
+(use-package writeroom-mode
+  :disabled
+  :custom
+  (writeroom-major-modes '(text-mode markdown-mode org-mode))
+  (writeroom-global-effects '(writeroom-set-alpha
+                              writeroom-set-menu-bar-lines
+                              writeroom-set-tool-bar-lines
+                              writeroom-set-vertical-scroll-bars))
+  (writeroom-width 0.9)
+  :hook
+  (org-mode . writeroom-mode)
+  (markdown-mode . writeroom-mode)
+  (text-mode . writeroom-mode))
+
+(use-package olivetti
+  :disabled
+  :custom
+  (olivetti-style 'fancy)
+  (olivetti-body-width 0.75)
+  :hook
+  (org-mode . olivetti-mode))
+
 (provide 'doc)
 ;; doc.el ends here.

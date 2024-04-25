@@ -11,6 +11,7 @@
 (require 'appearance)
 (require 'core)
 (require 'dev)
+(require 'doc)
 (require 'org-config)
 
 ;; Setup hotkeys for finding and (re)loading the Emacs config quickly.

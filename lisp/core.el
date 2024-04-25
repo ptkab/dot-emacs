@@ -52,11 +52,16 @@
   :bind (("C-;" . avy-goto-char)
          ("C-:" . avy-goto-line)))
 
+(use-package recentf
+  :bind
+  ("C-x C-r" . recentf)
+  :config
+  (recentf-mode t))
+
 ;; Setup completion in Emacs with Vertico+Consult+Orderless+Embark+Marginalia+Corfu
 
 ;; Vertico uses savehist to sort the completion options.
 (use-package savehist
-  :ensure nil
   :config
   (savehist-mode))
 

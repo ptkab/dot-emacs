@@ -7,61 +7,33 @@
 
 ;;; Code:
 
-;; Install the Elpaca package manager.
-(defvar elpaca-installer-version 0.6)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                 ((zerop (call-process "git" nil buffer t "clone"
-                                       (plist-get order :repo) repo)))
-                 ((zerop (call-process "git" nil buffer t "checkout"
-                                       (or (plist-get order :ref) "--"))))
-                 (emacs (concat invocation-directory invocation-name))
-                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                 ((require 'elpaca))
-                 ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
+;; Bootstrap code for downloading and setting up 'straight.el' package manager.
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/master/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; Add MELPA submissions to elpaca queue
-(elpaca-queue
- (elpaca (melpulls :host github :repo "progfolio/melpulls" :protocol ssh)
-   (add-to-list 'elpaca-menu-functions 'melpulls)))
+;; Load org mode as soon as `straight.el' is loaded.
+(straight-use-package 'org)
 
-;; Use the `use-package` macro with Elpaca
-(elpaca elpaca-use-package
-  (elpaca-use-package-mode)
-  (setq use-package-always-ensure t))
-(elpaca-wait)
+;; Make 'use-package' macro use 'straight.el' under the hood.
+(straight-use-package 'use-package)
+(use-package straight
+  :custom (straight-use-package-by-default t))
+(setq use-package-always-ensure t)
 
 ;; Sensible defaults is a collection of better default functions and keybindings.
-(add-hook 'elpaca-after-init-hook
-	  (lambda ()
-	    (require 'sensible-defaults)
-            (sensible-defaults/use-all-settings)
-            (sensible-defaults/use-all-keybindings)))
+(require 'sensible-defaults)
+(sensible-defaults/use-all-settings)
+(sensible-defaults/use-all-keybindings)
 
 (setq x-underline-at-descent-line t)
 
@@ -79,8 +51,9 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'column-number-mode)
 (electric-pair-mode 1)
-(turn-on-visual-line-mode)
-(turn-on-auto-fill)
+(setq-default visual-line-mode t
+	      fill-column 80
+	      auto-fill-mode t)
 (setq font-lock-maximum-decoration t)
 (setq scroll-preserve-screen-position t)
 (global-hl-line-mode t)
@@ -94,7 +67,7 @@
  create-lockfiles nil)
 
 ;; Open buffers from previous session by default when I start Emacs.
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 ;; Kill and yank settings. I override how kill ring functions in
 (setq-default
@@ -140,6 +113,7 @@
 (bind-key "M-<down>" 'end-of-buffer)
 (bind-key "M-[" 'previous-buffer)
 (bind-key "M-]" 'next-buffer)
+(bind-key "M-o" 'other-window)
 
 ;; Better bindings for editing.
 (bind-key "M-/" 'sensible-defaults/comment-or-uncomment-region-or-line)
