@@ -59,6 +59,9 @@
 (global-hl-line-mode t)
 (blink-cursor-mode -1)
 
+(setq-default left-fringe-width 0
+	      right-fringe-width 0)
+
 ;; I don't want autosave and backup files that Emacs creates.
 (setq-default
  auto-save-default nil
@@ -67,7 +70,8 @@
  create-lockfiles nil)
 
 ;; Open buffers from previous session by default when I start Emacs.
-;; (desktop-save-mode 1)
+(setq-default desktop-dirname user-emacs-directory)
+(desktop-save-mode 1)
 
 ;; Kill and yank settings. I override how kill ring functions in
 (setq-default

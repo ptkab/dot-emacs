@@ -30,5 +30,12 @@
   ("C-M-0" . treemacs)
   ("M-0" . treemacs-select-window))
 
+(use-package highlight-indent-guides
+  :custom
+  (highlight-indent-guides-method 'bitmap)
+  (highlight-indent-guides-responsive 'top)
+  :hook
+  (prog-mode . highlight-indent-guides-mode))
+
 (provide 'dev)
 ;; dev.el ends here.

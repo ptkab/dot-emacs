@@ -14,6 +14,21 @@
 (setq custom-file user-custom-file)
 (load-file custom-file)
 
+;; Set a toggle key to switch between light and dark variant of current theme.
+(defvar pratik/light-theme)
+(defvar pratik/dark-theme)
+(defun pratik/toggle-dark-light-theme ()
+  "Toggle between dark and light mode theme."
+  (interactive)
+  (defvar pratik/active-theme (car custom-enabled-themes))
+  (disable-theme pratik/active-theme)
+  (if (eq pratik/active-theme pratik/light-theme)
+      (setq pratik/active-theme pratik/dark-theme)
+    (setq pratik/active-theme pratik/light-theme))
+  (load-theme pratik/active-theme t))
+;; I am currently not using this.
+;; (bind-key "C-x c" 'pratik/toggle-dark-light-theme)
+
 ;; Set the title of frame as buffer(file) name and its mode.
 (setq-default frame-title-format '("%b [%m]"))
 
@@ -53,61 +68,14 @@
   (doom-modeline-buffer-file-name-style 'filename)
   :config (doom-modeline-mode t))
 
-;; Define helper function to toggle between light and dark mode themes and add a
-;; keybinding to it.
-(defvar pratik/light-theme)
-(defvar pratik/dark-theme)
-(defvar pratik/active-theme 'pratik/light-theme)
-(defun pratik/toggle-dark-light-theme ()
-  "Toggle between dark and light mode theme."
-  (interactive)
-  (disable-theme pratik/active-theme)
-  (if (eq pratik/active-theme pratik/light-theme)
-      (setq pratik/active-theme pratik/dark-theme)
-    (setq pratik/active-theme pratik/light-theme))
-  (load-theme pratik/active-theme t))
-(org-mode) ;; Fixes messed up leading stars.
-(bind-key "C-x c" 'pratik/toggle-dark-light-theme)
-
-
-(use-package doom-themes
-  :disabled
-  :config
-  (doom-themes-org-config)
-  (load-theme 'doom-vibrant t))
-
 ;; Dim the auxiliary buffers like Treemacs.
 (use-package solaire-mode
   :config
   (solaire-global-mode +1))
 
 (use-package spacemacs-theme
-  :disabled
   :config
-  (require 'spacemacs-theme)
-  (deftheme spacemacs-light "Spacemacs light theme")
-  (deftheme spacemacs-dark "Spacemacs dark theme")
-  (create-spacemacs-theme 'light 'spacemacs-light)
-  (create-spacemacs-theme 'dark 'spacemacs-dark)
-  (provide-theme 'spacemacs-light)
-  (provide-theme 'spacemacs-dark)
-  (setq pratik/light-theme 'spacemacs-light
-	pratik/dark-theme 'spacemacs-dark)
   (load-theme 'spacemacs-light t))
-
-(use-package zenburn-theme
-  :disabled
-  :init
-  (setq zenburn-scale-org-headlines t)
-  (setq zenburn-scale-outline-headlines t)
-  :config
-  (load-theme 'zenburn t))
-
-(use-package flucui-themes
-  :init
-  (flucui-themes-load-style 'light)
-  :bind
-  ("C-x c" . flucui-themes-switch-style))
 
 (provide 'appearance)
 ;;; appearance.el ends here.
