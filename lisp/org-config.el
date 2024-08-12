@@ -7,49 +7,83 @@
   (setq org-directory "~/org")
 
   (setq-default
-   org-agenda-block-separator ?-             ;; Add a line to separate agenda items in dinstint sections
-   org-agenda-max-entries 10                 ;; Show at max 10 entries from my agenda
-   org-agenda-skip-scheduled-if-done t       ;; No need to honor schedule if the task is already done
-   org-auto-align-tags t                     ;; Align the tags automatically
-   org-cycle-separator-lines 2               ;; Leave a line between org items
-   org-enforce-todo-checkbox-dependencies t  ;; Enforce checklist items should be completed in order
-   org-enforce-todo-dependencies t           ;; Enforce tasks should be completed in order
-   org-hide-emphasis-markers t               ;; Hide the Org markup indicators
-   org-hide-leading-stars t                  ;; Don't hide leading stars. Org-supertsar will take care of this
-   org-insert-heading-respect-content t      ;; Create Org header in the current subtree
-   org-log-into-drawer t                     ;; Use LOGBOOK drawer to take notes
-   org-pretty-entities t                     ;; Show UTF entities
-   org-special-ctrl-a/e t                    ;; C-{a,e} should behave differently on headings
-   org-src-fontify-natively t                ;; Enable source code highlighting
-   org-src-preserve-indentation t            ;; Emacs weirdly indents code blocks otherwise
-   org-startup-indented t                    ;; Auto indent the body under headlines
-   org-list-demote-modify-bullet '(("+" . "-") ("-" . "+")))
+   ;; Add a line to separate agenda items in dinstint sections
+   org-agenda-block-separator ?-
+   ;; Show at max 10 entries from my agenda
+   org-agenda-max-entries 10
+   ;; No need to honor schedule if the task is already done
+   org-agenda-skip-scheduled-if-done t
+   ;; Align the tags automatically
+   org-auto-align-tags t
+   ;; Leave a line between org items
+   org-cycle-separator-lines 2
+   ;; Enforce checklist items should be completed in order
+   org-enforce-todo-checkbox-dependencies t
+   ;; Enforce tasks should be completed in order
+   org-enforce-todo-dependencies t
+   ;; Hide the Org markup indicators
+   org-hide-emphasis-markers t
+   ;; Don't hide leading stars. Org-supertsar will take care of this
+   org-hide-leading-stars t
+   ;; Create Org header in the current subtree
+   org-insert-heading-respect-content t
+   ;; Use LOGBOOK drawer to take notes
+   org-log-into-drawer t
+   ;; Show UTF entities
+   org-pretty-entities t
+   ;; C-{a,e} should behave differently on headings
+   org-special-ctrl-a/e t
+   ;; Enable source code highlighting
+   org-src-fontify-natively t
+   ;; Emacs weirdly indents code blocks otherwise
+   org-src-preserve-indentation t
+   ;; Auto indent the body under headlines
+   org-startup-indented t
+   ;; Default bullet style when demoting item
+   org-list-demote-modify-bullet '(("+" . "-") ("-" . "+"))
+   ;; Disable initial source code indentation
+   org-edit-src-content-indentation 0
+   ;; Org tags to align immediately after the heading
+   org-tags-column 0)
 
   ;; I use Amazon SIM style statuses with some changes.
   (setq org-todo-keywords
 	'((sequence "TODO(t)"
-                    "IMPLEMENTATION(i)"
+                    "IN-PROGRESS(i)"
+		    "WAITING(w)"
                     "BLOCKED(b)"
                     "REVIEW(r)"
                     "|"
-                    "DELEGATED(l)"
+                    "CANCELED(c)"
                     "DONE(d)")))
 
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)))
+   '((python . t)
+     (java . t)
+     (shell . t)
+     (js . t)))
 
-  (defun pratik/org-adjust-tags-column ()
-    "Dynamically adjust `org-tags-column` to right-align tags."
-    (setq org-tags-column (- (- (window-width) 4))))
+  ;; (defun pratik/org-adjust-tags-column ()
+  ;;   "Dynamically adjust `org-tags-column` to right-align tags."
+  ;;   (setq org-tags-column (- (- (window-width) 4))))
+
+  (defun pratik/set-org-mode-fringe ()
+    (setq left-fringe-width 10
+	  right-fringe-width 10)
+    (set-face-attribute 'fringe nil
+			:background (face-attribute 'default :background))
+    (set-window-buffer nil (current-buffer)))
 
   :hook
   ;; Auto format org files before saving.
   (org-mode . (lambda ()
 		(add-hook 'before-save-hook #'org-fill-paragraph nil t)))
-  (org-mode . pratik/org-adjust-tags-column)
-  (window-configuration-change . pratik/org-adjust-tags-column)
+  ;; (org-mode . pratik/org-adjust-tags-column)
+  ;; (window-configuration-change . pratik/org-adjust-tags-column)
+  (org-mode . pratik/set-org-mode-fringe)
+
   :bind
   (("C-c a" . org-agenda)
    ("C-c c" . org-capture)))
@@ -66,8 +100,33 @@
 
 (use-package org-roam
   :custom
-  (setq org-roam-directory "~/org/notes")
-  :bind (("C-c n l")))
+  (setq org-roam-directory "~/org")
+  :bind
+  (("C-x c l" . org-roam-buffer-toggle)
+   ("C-x c f" . org-roam-node-find)
+   ("C-x c g" . org-roam-graph)
+   ("C-x c i" . org-roam-node-insert)
+   ("C-x c c" . org-roam-capture)
+   ;; Journaling with Dailies
+   ("C-x c j" . org-roam-dailies-capture-today))
+  :config
+  (setq org-roam-node-display-template
+	(concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode))
+
+(use-package org-modern
+  :after org
+  :config
+  (global-org-modern-mode))
+
+(use-package org-modern-indent
+  :straight (org-modern-indent
+	     :type git
+	     :host github
+	     :repo "jdtsmith/org-modern-indent")
+  :after org org-modern
+  :config
+  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
 
 (provide 'org-config)
 ;; org-config.el ends here.

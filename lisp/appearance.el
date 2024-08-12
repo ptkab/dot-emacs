@@ -12,7 +12,6 @@
 (unless (file-exists-p user-custom-file)
   (with-temp-buffer (write-file user-custom-file)))
 (setq custom-file user-custom-file)
-(load-file custom-file)
 
 ;; Set a toggle key to switch between light and dark variant of current theme.
 (defvar pratik/light-theme)
@@ -31,6 +30,10 @@
 
 ;; Set the title of frame as buffer(file) name and its mode.
 (setq-default frame-title-format '("%b [%m]"))
+
+;; Default foreground color (grey50) of column-indicator stands out too much.
+(set-face-attribute 'fill-column-indicator nil :foreground "grey90")
+
 
 ;; Set font face and size.
 (set-face-attribute 'default nil :height 150)

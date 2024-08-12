@@ -57,6 +57,7 @@
 (setq font-lock-maximum-decoration t)
 (setq scroll-preserve-screen-position t)
 (global-hl-line-mode t)
+(global-display-fill-column-indicator-mode t)
 (blink-cursor-mode -1)
 
 (setq-default left-fringe-width 0
