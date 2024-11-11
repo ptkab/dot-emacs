@@ -48,9 +48,9 @@
 
   ;; I use Amazon SIM style statuses with some changes.
   (setq org-todo-keywords
-	'((sequence "TODO(t)"
+		'((sequence "TODO(t)"
                     "IN-PROGRESS(i)"
-		    "WAITING(w)"
+					"WAITING(w)"
                     "BLOCKED(b)"
                     "REVIEW(r)"
                     "|"
@@ -71,18 +71,19 @@
 
   (defun pratik/set-org-mode-fringe ()
     (setq left-fringe-width 10
-	  right-fringe-width 10)
+		  right-fringe-width 10)
     (set-face-attribute 'fringe nil
-			:background (face-attribute 'default :background))
+						:background (face-attribute 'default :background))
     (set-window-buffer nil (current-buffer)))
 
   :hook
   ;; Auto format org files before saving.
   (org-mode . (lambda ()
-		(add-hook 'before-save-hook #'org-fill-paragraph nil t)))
+				(add-hook 'before-save-hook #'org-fill-paragraph nil t)))
   ;; (org-mode . pratik/org-adjust-tags-column)
   ;; (window-configuration-change . pratik/org-adjust-tags-column)
   (org-mode . pratik/set-org-mode-fringe)
+  (org-mode . flyspell-mode)
 
   :bind
   (("C-c a" . org-agenda)
@@ -97,36 +98,6 @@
   (org-superstar-special-todo-items t)
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-(use-package org-roam
-  :custom
-  (setq org-roam-directory "~/org")
-  :bind
-  (("C-x c l" . org-roam-buffer-toggle)
-   ("C-x c f" . org-roam-node-find)
-   ("C-x c g" . org-roam-graph)
-   ("C-x c i" . org-roam-node-insert)
-   ("C-x c c" . org-roam-capture)
-   ;; Journaling with Dailies
-   ("C-x c j" . org-roam-dailies-capture-today))
-  :config
-  (setq org-roam-node-display-template
-	(concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode))
-
-(use-package org-modern
-  :after org
-  :config
-  (global-org-modern-mode))
-
-(use-package org-modern-indent
-  :straight (org-modern-indent
-	     :type git
-	     :host github
-	     :repo "jdtsmith/org-modern-indent")
-  :after org org-modern
-  :config
-  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
 
 (provide 'org-config)
 ;; org-config.el ends here.

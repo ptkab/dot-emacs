@@ -52,16 +52,15 @@
 (add-hook 'prog-mode-hook 'column-number-mode)
 (electric-pair-mode 1)
 (setq-default visual-line-mode t
-	      fill-column 80
-	      auto-fill-mode t)
+			  fill-column 80
+			  auto-fill-mode t)
 (setq font-lock-maximum-decoration t)
 (setq scroll-preserve-screen-position t)
 (global-hl-line-mode t)
-(global-display-fill-column-indicator-mode t)
 (blink-cursor-mode -1)
 
 (setq-default left-fringe-width 0
-	      right-fringe-width 0)
+			  right-fringe-width 0)
 
 ;; I don't want autosave and backup files that Emacs creates.
 (setq-default
@@ -96,6 +95,7 @@
       #'command-completion-default-include-p)
 ;; Enable indentation+completion using the TAB key.
 (setq tab-always-indent 'complete)
+(setq-default tab-width 4)
 
 ;; Ignore buffers that start with '*' when switching buffers.
 (set-frame-parameter (selected-frame) 'buffer-predicate

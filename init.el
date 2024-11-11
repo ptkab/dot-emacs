@@ -13,6 +13,7 @@
 (require 'dev)
 (require 'doc)
 (require 'org-config)
+(require 'ledger-config)
 
 ;; Setup hotkeys for finding and (re)loading the Emacs config quickly.
 (bind-key "C-c z 1" (lambda ()

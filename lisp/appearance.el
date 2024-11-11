@@ -63,6 +63,9 @@
   :config
   (treemacs-load-theme "nerd-icons"))
 
+(use-package doom-themes
+  :config (load-theme 'doom-one t))
+
 (use-package doom-modeline
   :custom
   (doom-modeline-enable-word-count t)
@@ -77,6 +80,7 @@
   (solaire-global-mode +1))
 
 (use-package spacemacs-theme
+  :disabled
   :config
   (load-theme 'spacemacs-light t))
 
