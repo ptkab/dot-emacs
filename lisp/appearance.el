@@ -36,8 +36,8 @@
 
 
 ;; Set font face and size.
-(set-face-attribute 'default nil :height 150)
-(set-frame-font "JetBrains Mono")
+(set-face-attribute 'default nil :height 160)
+(set-frame-font "JetBrains Mono NL")
 
 ;; Required for doom-modeline
 (use-package nerd-icons
@@ -63,8 +63,13 @@
   :config
   (treemacs-load-theme "nerd-icons"))
 
+(use-package ef-themes
+  :disabled
+  :config
+  (load-theme 'ef-maris-light t))
+
 (use-package doom-themes
-  :config (load-theme 'doom-one t))
+  :config (load-theme 'doom-zenburn t))
 
 (use-package doom-modeline
   :custom

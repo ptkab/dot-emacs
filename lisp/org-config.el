@@ -3,6 +3,7 @@
 ;; Code:
 
 (use-package org
+  :ensure nil
   :init
   (setq org-directory "~/org")
 
@@ -78,8 +79,8 @@
 
   :hook
   ;; Auto format org files before saving.
-  (org-mode . (lambda ()
-				(add-hook 'before-save-hook #'org-fill-paragraph nil t)))
+  ;; (org-mode . (lambda ()
+  ;; (add-hook 'before-save-hook #'org-fill-paragraph)))
   ;; (org-mode . pratik/org-adjust-tags-column)
   ;; (window-configuration-change . pratik/org-adjust-tags-column)
   (org-mode . pratik/set-org-mode-fringe)
@@ -98,6 +99,17 @@
   (org-superstar-special-todo-items t)
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(use-package org-journal
+  :init
+  (setq org-journal-enable-entry-autodate nil)
+  :custom
+  (org-journal-dir (expand-file-name "journal/" org-directory))
+  (org-journal-file-type 'daily)
+  (org-journal-date-format "%A, %b %d %Y")
+  (org-journal-file-format "%Y/%m/%m-%d-%Y.org")
+  (org-journal-enable-agenda-integration t)
+  (org-journal-time-format ""))
 
 (provide 'org-config)
 ;; org-config.el ends here.

@@ -103,6 +103,7 @@
 
 ;; Use Option key as Super on Mac.
 (setq mac-option-modifier 'super)
+(setq mac-command-modifier 'meta)
 
 ;; Better keybindings for buffer management.
 (bind-key "M-`" 'other-frame)

@@ -4,6 +4,11 @@
 
 ;;; Code:
 
+;; Turn the UI elements off before UI initialization instead of after.
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+
 ;; Disable the built in package.el package manager. I use Straight instead.
 (setq package-enable-at-startup nil)
 (setq inhibit-default-init nil)
@@ -16,15 +21,8 @@
 ;; Disable annoying native compilation warning messages.
 (setq native-comp-async-report-warnings-errors nil)
 
-;; Turn the UI elements off before UI initialization instead of after.
-(push '(menu-bar-lines . 0) default-frame-alist)
-(push '(tool-bar-lines . 0) default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
-
-;; Since I use Emacs from emacs-port with no title bar, I need this to drag
-;; Emacs frame with mouse to another screen when using multiple displays.
-(push '(drag-internal-border . 1) default-frame-alist)
-(push '(internal-border-width . 1) default-frame-alist)
+;; When both .el and .elc/.eln files are available, load the latest one.
+(setq load-prefer-newer t)
 
 ;; Start Emacs in maximized frame.
 (push '(fullscreen . maximized) default-frame-alist)
@@ -32,8 +30,6 @@
 ;; Don't bug me with ring bell
 (setq ring-bell-function #'ignore
       inhibit-startup-screen t)
-
-;; (setq desktop-restore-forces-onscreen nil)
 
 (provide 'early-init)
 ;;; early-init.el ends here.
