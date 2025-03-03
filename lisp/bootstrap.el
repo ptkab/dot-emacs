@@ -22,7 +22,7 @@
   (load bootstrap-file nil 'nomessage))
 
 ;; Load org mode as soon as `straight.el' is loaded.
-(straight-use-package 'org)
+;; (straight-use-package 'org)
 
 ;; Make 'use-package' macro use 'straight.el' under the hood.
 (straight-use-package 'use-package)
@@ -51,16 +51,12 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'column-number-mode)
 (electric-pair-mode 1)
-(setq-default visual-line-mode t
-			  fill-column 80
+(setq-default fill-column 80
 			  auto-fill-mode t)
 (setq font-lock-maximum-decoration t)
 (setq scroll-preserve-screen-position t)
 (global-hl-line-mode t)
 (blink-cursor-mode -1)
-
-(setq-default left-fringe-width 0
-			  right-fringe-width 0)
 
 ;; I don't want autosave and backup files that Emacs creates.
 (setq-default
@@ -70,8 +66,8 @@
  create-lockfiles nil)
 
 ;; Open buffers from previous session by default when I start Emacs.
-(setq-default desktop-dirname user-emacs-directory)
-(desktop-save-mode 1)
+;; (setq-default desktop-dirname user-emacs-directory)
+;; (desktop-save-mode 1)
 
 ;; Kill and yank settings. I override how kill ring functions in
 (setq-default
@@ -96,6 +92,7 @@
 ;; Enable indentation+completion using the TAB key.
 (setq tab-always-indent 'complete)
 (setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
 
 ;; Ignore buffers that start with '*' when switching buffers.
 (set-frame-parameter (selected-frame) 'buffer-predicate
@@ -122,7 +119,6 @@
 (bind-key "M-o" 'other-window)
 
 ;; Better bindings for editing.
-(bind-key "M-/" 'sensible-defaults/comment-or-uncomment-region-or-line)
 (bind-key "M-z" 'undo)
 (bind-key "M-Z" 'undo-redo)
 (bind-key "M-d" 'mark-word)

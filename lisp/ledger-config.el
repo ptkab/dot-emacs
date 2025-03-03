@@ -5,6 +5,6 @@
 (use-package ledger-mode)
 
 (use-package flycheck-ledger
-  :after ledger-mode)
+  :after (ledger-mode))
 
 (provide 'ledger-config)

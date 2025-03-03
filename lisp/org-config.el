@@ -36,6 +36,8 @@
    org-special-ctrl-a/e t
    ;; Enable source code highlighting
    org-src-fontify-natively t
+   ;; Enable language based completion with TAB in source blocks
+   org-src-tab-acts-natively t
    ;; Emacs weirdly indents code blocks otherwise
    org-src-preserve-indentation t
    ;; Auto indent the body under headlines
@@ -66,26 +68,8 @@
      (shell . t)
      (js . t)))
 
-  ;; (defun pratik/org-adjust-tags-column ()
-  ;;   "Dynamically adjust `org-tags-column` to right-align tags."
-  ;;   (setq org-tags-column (- (- (window-width) 4))))
-
-  (defun pratik/set-org-mode-fringe ()
-    (setq left-fringe-width 10
-		  right-fringe-width 10)
-    (set-face-attribute 'fringe nil
-						:background (face-attribute 'default :background))
-    (set-window-buffer nil (current-buffer)))
-
   :hook
-  ;; Auto format org files before saving.
-  ;; (org-mode . (lambda ()
-  ;; (add-hook 'before-save-hook #'org-fill-paragraph)))
-  ;; (org-mode . pratik/org-adjust-tags-column)
-  ;; (window-configuration-change . pratik/org-adjust-tags-column)
-  (org-mode . pratik/set-org-mode-fringe)
   (org-mode . flyspell-mode)
-
   :bind
   (("C-c a" . org-agenda)
    ("C-c c" . org-capture)))
@@ -95,8 +79,8 @@
 
 (use-package org-superstar
   :after org
-  :custom
-  (org-superstar-special-todo-items t)
+  :init
+  (setq org-superstar-headline-bullets-list '("●" "○" "▶" "▷"))
   :config
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
@@ -104,12 +88,31 @@
   :init
   (setq org-journal-enable-entry-autodate nil)
   :custom
+  (org-journal-find-file 'find-file)
   (org-journal-dir (expand-file-name "journal/" org-directory))
   (org-journal-file-type 'daily)
   (org-journal-date-format "%A, %b %d %Y")
   (org-journal-file-format "%Y/%m/%m-%d-%Y.org")
   (org-journal-enable-agenda-integration t)
-  (org-journal-time-format ""))
+  (org-journal-time-format "")
+  :bind
+  ("C-c j" . org-journal-new-entry))
+
+(defun my/org-src-fix-lsp-filename ()
+  "If the buffer is an indirect org-src buffer (e.g. for python)
+that lacks a file name, assign it a dummy file name so that LSP
+works."
+  (when (and (derived-mode-p 'python-mode)
+             (not buffer-file-name))
+    ;; If the org file is saved, base the fake filename on its name.
+    (let ((base (or (buffer-file-name (buffer-base-buffer))
+                    (make-temp-file "org-src-" nil ".py"))))
+      ;; Create a dummy file name that includes the buffer name.
+      (setq-local buffer-file-name (concat base "::" (buffer-name)))
+      ;; Also update the LSP buffer URI.
+      (setq-local lsp--buffer-uri (lsp--path-to-uri buffer-file-name)))))
+
+(add-hook 'org-src-mode-hook #'my/org-src-fix-lsp-filename)
 
 (provide 'org-config)
 ;; org-config.el ends here.

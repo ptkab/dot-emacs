@@ -13,31 +13,28 @@
   (with-temp-buffer (write-file user-custom-file)))
 (setq custom-file user-custom-file)
 
-;; Set a toggle key to switch between light and dark variant of current theme.
-(defvar pratik/light-theme)
-(defvar pratik/dark-theme)
-(defun pratik/toggle-dark-light-theme ()
-  "Toggle between dark and light mode theme."
-  (interactive)
-  (defvar pratik/active-theme (car custom-enabled-themes))
-  (disable-theme pratik/active-theme)
-  (if (eq pratik/active-theme pratik/light-theme)
-      (setq pratik/active-theme pratik/dark-theme)
-    (setq pratik/active-theme pratik/light-theme))
-  (load-theme pratik/active-theme t))
-;; I am currently not using this.
-;; (bind-key "C-x c" 'pratik/toggle-dark-light-theme)
-
 ;; Set the title of frame as buffer(file) name and its mode.
-(setq-default frame-title-format '("%b [%m]"))
-
-;; Default foreground color (grey50) of column-indicator stands out too much.
-(set-face-attribute 'fill-column-indicator nil :foreground "grey90")
-
+(setq-default frame-title-format '("%b"))
 
 ;; Set font face and size.
-(set-face-attribute 'default nil :height 160)
-(set-frame-font "JetBrains Mono NL")
+(set-face-attribute 'default nil
+					:height 150
+					:family "Geist Mono"
+					:weight 'normal)
+
+(use-package visual-fill-column
+  :config
+  (global-visual-fill-column-mode 1))
+
+(use-package adaptive-wrap
+  :hook
+  (markdown-mode . adaptive-wrap-prefix-mode)
+  (org-mode . adaptive-wrap-prefix-mode))
+
+(use-package emacs
+  :ensure nil
+  :hook
+  (emacs-startup . (lambda () (global-visual-line-mode 1))))
 
 ;; Required for doom-modeline
 (use-package nerd-icons
@@ -63,31 +60,48 @@
   :config
   (treemacs-load-theme "nerd-icons"))
 
-(use-package ef-themes
-  :disabled
-  :config
-  (load-theme 'ef-maris-light t))
-
 (use-package doom-themes
-  :config (load-theme 'doom-zenburn t))
+  :custom
+  (doom-themes-enable-italic nil)
+  :config
+  (doom-themes-org-config))
+
+;; Automatically toggle between light and dark themes based on time of the day.
+(setq calendar-latitude 37.338207)
+(setq calendar-longitude -121.886330)
+(use-package circadian
+  :after (doom-themes)
+  :config
+  (setq circadian-themes '((:sunrise . doom-tomorrow-day)
+                           (:sunset  . doom-nova)))
+  (circadian-setup))
 
 (use-package doom-modeline
   :custom
   (doom-modeline-enable-word-count t)
   (doom-modeline-indent-info t)
-  (doom-modeline-height 30)
+  (doom-modeline-height 20)
   (doom-modeline-buffer-file-name-style 'filename)
+  ;; visual-fill-colum affects modeline too. This pushes the right edge of mode-line to right-fringe.
+  (mode-line-right-align-edge 'right-fringe)
   :config (doom-modeline-mode t))
 
-;; Dim the auxiliary buffers like Treemacs.
 (use-package solaire-mode
+  :after (doom-themes)
   :config
-  (solaire-global-mode +1))
+  ;; (add-to-list 'solaire-mode-themes-to-face-swap "^doom-")
+  (add-to-list 'solaire-mode-themes-to-face-swap 'doom-nova)
+  (solaire-global-mode 1))
 
-(use-package spacemacs-theme
-  :disabled
+(use-package spacious-padding
+  :init
+  (setq spacious-padding-widths
+        '( :internal-border-width 10
+           :tab-width 4
+           :right-divider-width 5
+           :fringe-width 8))
   :config
-  (load-theme 'spacemacs-light t))
+  (spacious-padding-mode 1))
 
 (provide 'appearance)
 ;;; appearance.el ends here.

@@ -27,6 +27,8 @@
 ;; Start Emacs in maximized frame.
 (push '(fullscreen . maximized) default-frame-alist)
 
+(setq frame-resize-pixelwise t)
+
 ;; Don't bug me with ring bell
 (setq ring-bell-function #'ignore
       inhibit-startup-screen t)

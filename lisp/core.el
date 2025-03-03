@@ -75,7 +75,7 @@
   (vertico-indexed-mode)
   (vertico-mode)
   (setq vertico-multiform-commands
-	'((consult-line
+        '((consult-line
            posframe
            (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
            (vertico-posframe-border-width . 10)
@@ -84,12 +84,17 @@
   (vertico-multiform-mode 1))
 
 (use-package vertico-posframe
-  :init
-  (setq vertico-posframe-parameters
-	'((left-fringe . 8)
-          (right-fringe . 8)))
   :config
+  (setq vertico-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)
+          (min-width . 90)
+          (width . 90)
+          (max-width . 90)
+          (poshandler . posframe-poshandler-frame-center)))
   (vertico-posframe-mode))
+
+
 
 ;; Basically Ivy-rich.
 (use-package marginalia
@@ -119,8 +124,6 @@
          ;; C-x bindings in `ctl-x-map'
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
          ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
          ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
          ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
@@ -132,7 +135,7 @@
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ;; M-g bindings in `goto-map'
          ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g f" . consult-flycheck)              ;; Alternative: consult-flyspell
          ("M-g g" . consult-goto-line)             ;; orig. goto-line
          ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
          ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
@@ -146,7 +149,7 @@
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
-	 ("C-c s" . consult-ripgrep)               ;; I am used to this key from Ivy-Counsel
+         ("C-c s" . consult-ripgrep)               ;; I am used to this key from Ivy-Counsel
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
@@ -229,15 +232,29 @@
   (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   (corfu-scroll-margin 5)        ;; Use scroll margin
   (corfu-min-width 45)           ;; Minimum width of the completion buffer
+  (corfu-quit-no-match t)        ;; Quit if no match is found
+  (corfu-quit-at-boundary t)     ;; Quit at word boundaries
   :config
   (corfu-popupinfo-mode)
   (corfu-history-mode)
   (corfu-echo-mode)
   (corfu-indexed-mode)
   (global-corfu-mode)
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+  :bind
+  (:map corfu-map
+        ("RET" . nil)
+        ("<return>" . nil)))
 
-
+(use-package imenu-list
+  :custom
+  (imenu-list-focus-after-activation t)
+  (imenu-list-auto-resize t)
+  (imenu-list-position 'right)
+  :bind
+  ("s-'" . imenu-list-smart-toggle)
+  :config
+  (imenu-list-minor-mode))
 
 (provide 'core)
 ;;; core.el ends here.

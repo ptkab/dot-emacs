@@ -24,8 +24,11 @@
   (treemacs-filewatch-mode t)
   (treemacs-indent-guide-mode t)
   (treemacs-move-forward-on-expand t)
+  (treemacs-user-mode-line-format 'none)
   :config
   (treemacs-hide-gitignored-files-mode t)
+  :hook
+  (emacs-startup . treemacs)
   :bind
   ("C-M-0" . treemacs)
   ("M-0" . treemacs-select-window))
@@ -36,6 +39,27 @@
   (highlight-indent-guides-responsive 'top)
   :hook
   (prog-mode . highlight-indent-guides-mode))
+
+(use-package lsp-mode
+  :commands (lsp lsp-defferred)
+  :init
+  (setq lsp-completion-provider :none)
+  (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-enable-indirect-buffer t)
+  :config
+  (lsp-enable-which-key-integration t)
+  (lsp-enable-imenu))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-sideline-enable t))
+
+(use-package magit
+  :bind
+  ("C-x g" . magit-status))
+
 
 (provide 'dev)
 ;; dev.el ends here.
